@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveVision | Galeria Exclusiva de Carros e Motos</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#090d16',
+                        darkCard: '#111827',
+                        accentRed: '#ff2a5f',
+                        accentCyan: '#00f0ff',
+                        accentYellow: '#ffb703',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .glow-effect {
+            box-shadow: 0 0 25px -5px rgba(255, 42, 95, 0.3);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 25px -5px rgba(0, 240, 255, 0.3);
+        }
+        .card-zoom:hover .card-img {
+            transform: scale(1.08);
+        }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff2a5f;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-gray-100 min-h-screen flex flex-col justify-between selection:bg-red-500 selection:text-white">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-gray-800/80 transition-all duration-300" id="main-header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-lg group-hover:scale-105 transition-transform">
+                        <i class="fa-solid font-bold fa-gauge-high"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-wider text-white">DRIVE<span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-amber-400">VISION</span></span>
+                        <span class="block text-[10px] tracking-widest text-gray-400 font-semibold uppercase -mt-1">Supercars & Motorbikes</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+                    <a href="#hero" class="text-white hover:text-red-500 transition-colors">Início</a>
+                    <a href="#gallery" onclick="filterCategory('carros')" class="text-gray-300 hover:text-red-500 transition-colors">Carros</a>
+                    <a href="#gallery" onclick="filterCategory('motos')" class="text-gray-300 hover:text-red-500 transition-colors">Motos</a>
+                    <a href="#stats" class="text-gray-300 hover:text-red-500 transition-colors">Sobre</a>
+                    <a href="#contact" class="text-gray-300 hover:text-red-500 transition-colors">Contato</a>
+                </nav>
+
+                <!-- Favorites Badge & Mobile Toggle -->
+                <div class="flex items-center gap-4">
+                    <button id="nav-fav-btn" onclick="toggleFavoritesView()" class="relative flex items-center gap-2 bg-gray-800/80 hover:bg-gray-700 px-4 py-2 rounded-xl border border-gray-700 text-sm font-medium transition-all group">
+                        <i class="fa-solid fa-heart text-red-500 group-hover:scale-110 transition-transform"></i>
+                        <span class="hidden sm:inline">Favoritos</span>
+                        <span id="fav-count" class="bg-red-600 text-white text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                    </button>
+
+                    <!-- Mobile Hamburger -->
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white text-2xl focus:outline-none">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-gray-800 px-4 pt-2 pb-6 space-y-3">
+            <a href="#hero" class="block text-gray-200 hover:text-red-500 py-2 font-medium">Início</a>
+            <a href="#gallery" onclick="filterCategory('carros'); closeMobileMenu()" class="block text-gray-200 hover:text-red-500 py-2 font-medium">Carros</a>
+            <a href="#gallery" onclick="filterCategory('motos'); closeMobileMenu()" class="block text-gray-200 hover:text-red-500 py-2 font-medium">Motos</a>
+            <a href="#stats" onclick="closeMobileMenu()" class="block text-gray-200 hover:text-red-500 py-2 font-medium">Sobre</a>
+            <a href="#contact" onclick="closeMobileMenu()" class="block text-gray-200 hover:text-red-500 py-2 font-medium">Contato</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-16">
+        <!-- Hero Background Image with Gradient Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=2000&auto=format&fit=crop" 
+                 alt="Supercar Hero" 
+                 class="w-full h-full object-cover object-center opacity-40 scale-105 animate-pulse" style="animation-duration: 8s;">
+            <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/70 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-darkBg/90 via-transparent to-darkBg/90"></div>
+        </div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-4 text-center space-y-8">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border-red-500/30 text-red-400 text-xs sm:text-sm font-semibold tracking-wider uppercase">
+                <i class="fa-solid fa-fire text-amber-500"></i> Coleção 4K High Performance
+            </div>
+            
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white leading-none">
+                A Arte sobre <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-amber-400 to-cyan-400">Rodas & Velocidade</span>
+            </h1>
+            
+            <p class="max-w-2xl mx-auto text-gray-300 text-base sm:text-xl font-light leading-relaxed">
+                Explore a mais impressionante galeria visual de máquinas lendárias. De supercarros exóticos a supermotos customizadas em altíssima resolução.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <a href="#gallery" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-red-600 to-amber-500 text-white font-bold hover:brightness-110 transition-all glow-effect flex items-center justify-center gap-3">
+                    <span>Explorar Galeria</span>
+                    <i class="fa-solid fa-arrow-down"></i>
+                </a>
+                <a href="#stats" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-panel text-gray-200 hover:text-white hover:bg-gray-800/80 font-bold transition-all border border-gray-700 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                    <span>Conhecer o Acervo</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FILTERS & SEARCH SECTION -->
+    <section id="gallery" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-darkCard/80 p-6 rounded-2xl border border-gray-800 shadow-2xl">
+            
+            <!-- Category Pills Filter -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-none" id="category-pills">
+                <button onclick="filterCategory('todos')" class="cat-pill active px-5 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all bg-red-600 text-white shadow-lg">
+                    Todos
+                </button>
+                <button onclick="filterCategory('esportivos')" class="cat-pill px-5 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white">
+                    Carros Esportivos
+                </button>
+                <button onclick="filterCategory('motos-custom')" class="cat-pill px-5 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white">
+                    Motos Custom
+                </button>
+                <button onclick="filterCategory('supercars')" class="cat-pill px-5 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white">
+                    Supercars
+                </button>
+                <button onclick="filterCategory('naked-bikes')" class="cat-pill px-5 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white">
+                    Naked Bikes
+                </button>
+                <button onclick="filterCategory('classicos')" class="cat-pill px-5 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white">
+                    Clássicos
+                </button>
+            </div>
+
+            <!-- Search Bar & Sort Dropdown -->
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+                <div class="relative w-full sm:w-64">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="search-input" placeholder="Buscar marca, modelo..." 
+                           class="w-full bg-gray-900 border border-gray-700 rounded-xl pl-11 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition-colors">
+                </div>
+                <select id="sort-select" onchange="sortVehicles()" class="w-full sm:w-auto bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-red-500">
+                    <option value="default">Ordenar Por: Destaques</option>
+                    <option value="power">Mais Potentes</option>
+                    <option value="year-desc">Mais Recentes (Ano)</option>
+                    <option value="speed">Maior Velocidade</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Dynamic Header Info Bar -->
+        <div class="flex items-center justify-between my-6 px-2">
+            <h2 class="text-xl font-bold text-white flex items-center gap-2" id="gallery-title">
+                <i class="fa-solid fa-car-side text-red-500"></i> Mostrando Todos os Veículos
+            </h2>
+            <span class="text-sm text-gray-400" id="result-count">Carregando...</span>
+        </div>
+
+        <!-- PHOTO GALLERY GRID -->
+        <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Cards generated dynamically via JavaScript -->
+        </div>
+
+        <!-- Empty State Message -->
+        <div id="empty-state" class="hidden text-center py-20 bg-darkCard/40 rounded-2xl border border-dashed border-gray-800 mt-6">
+            <i class="fa-solid fa-ban text-5xl text-gray-600 mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-300">Nenhum veículo encontrado</h3>
+            <p class="text-gray-500 text-sm mt-1">Tente mudar o termo de pesquisa ou selecionar outra categoria.</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-xl text-sm font-semibold transition-all">
+                Resetar Filtros
+            </button>
+        </div>
+    </section>
+
+    <!-- STATS & ABOUT SECTION -->
+    <section id="stats" class="py-20 bg-darkCard/50 border-y border-gray-800/80 my-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div class="space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-semibold uppercase tracking-wider">
+                        <i class="fa-solid fa-bullseye"></i> Paixão por Fotografia Automotiva
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
+                        A plataforma definitiva para entusiastas do automobilismo
+                    </h2>
+                    <p class="text-gray-400 leading-relaxed">
+                        Nossa missão é reunir imagens de alta resolução que capturam o design, a aerodinâmica e o espírito das máquinas mais desejadas do mundo. Sejam hipercarros de edição limitada ou customizações de motos lendárias.
+                    </p>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-4">
+                        <div class="p-4 rounded-xl bg-gray-900/80 border border-gray-800 text-center">
+                            <span class="block text-3xl font-black text-red-500">150+</span>
+                            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Veículos Salvos</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-gray-900/80 border border-gray-800 text-center">
+                            <span class="block text-3xl font-black text-amber-400">4K Ultra</span>
+                            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Resolução</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-gray-900/80 border border-gray-800 text-center col-span-2 sm:col-span-1">
+                            <span class="block text-3xl font-black text-cyan-400">50k+</span>
+                            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Downloads</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Image Showcase Stack -->
+                <div class="relative">
+                    <div class="absolute -inset-1 rounded-2xl bg-gradient-to-r from-red-600 to-cyan-500 opacity-30 blur-lg"></div>
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
+                        <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1200&auto=format&fit=crop" 
+                             alt="Custom Bike Showcase" 
+                             class="w-full h-80 sm:h-96 object-cover hover:scale-105 transition-transform duration-500">
+                        <div class="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-darkBg via-darkBg/80 to-transparent">
+                            <span class="text-xs uppercase tracking-widest text-amber-400 font-bold">Destaque da Semana</span>
+                            <h3 class="text-xl font-bold text-white">Custom Bobber & Choppers Night Session</h3>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DETAIL MODAL / LIGHTBOX -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/90 backdrop-blur-md overflow-y-auto">
+        <div class="relative w-full max-w-5xl bg-darkCard rounded-2xl border border-gray-800 shadow-2xl overflow-hidden my-8 my-auto">
+            
+            <!-- Close Modal Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 text-white hover:bg-red-600 transition-colors flex items-center justify-center focus:outline-none">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12">
+                <!-- Modal Image Section -->
+                <div class="lg:col-span-7 bg-black flex flex-col justify-between relative min-h-[320px] lg:min-h-[500px]">
+                    <img id="modal-img" src="" alt="" class="w-full h-full object-cover max-h-[550px]">
+                    <div class="absolute bottom-4 left-4 right-4 flex justify-between items-center bg-black/60 backdrop-blur-md p-3 rounded-xl border border-white/10">
+                        <span class="text-xs text-gray-300 font-medium" id="modal-photo-credit">Foto por Unsplash</span>
+                        <a id="modal-download-btn" href="#" target="_blank" download class="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                            <i class="fa-solid fa-download"></i> Baixar HD
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Modal Specs & Info Section -->
+                <div class="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span id="modal-category" class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-red-500/20 text-red-400 border border-red-500/30">
+                                Categoria
+                            </span>
+                            <span id="modal-year" class="text-sm font-semibold text-gray-400">2023</span>
+                        </div>
+                        
+                        <h2 id="modal-title" class="text-2xl sm:text-3xl font-black text-white">Marca Modelo</h2>
+                        <p id="modal-desc" class="text-gray-400 text-sm mt-3 leading-relaxed">
+                            Descrição detalhada do veículo...
+                        </p>
+
+                        <!-- Specifications Grid -->
+                        <div class="mt-6 space-y-3">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500">Especificações Técnicas</h4>
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="p-3 rounded-xl bg-gray-900 border border-gray-800">
+                                    <span class="block text-xs text-gray-500">Motor</span>
+                                    <span id="modal-spec-engine" class="font-semibold text-gray-200">-</span>
+                                </div>
+                                <div class="p-3 rounded-xl bg-gray-900 border border-gray-800">
+                                    <span class="block text-xs text-gray-500">Potência</span>
+                                    <span id="modal-spec-power" class="font-semibold text-amber-400">-</span>
+                                </div>
+                                <div class="p-3 rounded-xl bg-gray-900 border border-gray-800">
+                                    <span class="block text-xs text-gray-500">Velocidade Máx.</span>
+                                    <span id="modal-spec-speed" class="font-semibold text-cyan-400">-</span>
+                                </div>
+                                <div class="p-3 rounded-xl bg-gray-900 border border-gray-800">
+                                    <span class="block text-xs text-gray-500">0 - 100 km/h</span>
+                                    <span id="modal-spec-accel" class="font-semibold text-red-400">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Action Footer -->
+                    <div class="pt-4 border-t border-gray-800 flex items-center justify-between gap-4">
+                        <button id="modal-fav-toggle" class="flex-1 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-bold text-sm transition-all flex items-center justify-center gap-2">
+                            <i class="fa-regular fa-heart"></i>
+                            <span>Favoritar</span>
+                        </button>
+                        <button onclick="copyShareLink()" class="px-4 py-3 rounded-xl bg-gray-900 border border-gray-800 text-gray-300 hover:text-white transition-all text-sm font-semibold" title="Copiar Link">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="contact" class="bg-darkCard border-t border-gray-800 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                
+                <div class="md:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white font-black text-sm">
+                            <i class="fa-solid fa-gauge-high"></i>
+                        </div>
+                        <span class="text-xl font-black text-white">DRIVE<span class="text-red-500">VISION</span></span>
+                    </div>
+                    <p class="text-sm text-gray-400 max-w-sm">
+                        O seu destino número um para encontrar e apreciar fotografias de alta qualidade das melhores máquinas automotivas e de duas rodas do planeta.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-3 text-sm uppercase tracking-wider">Links Rápidos</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#hero" class="hover:text-red-500 transition-colors">Início</a></li>
+                        <li><a href="#gallery" onclick="filterCategory('carros')" class="hover:text-red-500 transition-colors">Carros Esportivos</a></li>
+                        <li><a href="#gallery" onclick="filterCategory('motos')" class="hover:text-red-500 transition-colors">Motos Custom & Naked</a></li>
+                        <li><a href="#stats" class="hover:text-red-500 transition-colors">Sobre a Galeria</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-3 text-sm uppercase tracking-wider">Siga a DriveVision</h4>
+                    <div class="flex gap-3 text-lg">
+                        <a href="#" class="w-10 h-10 rounded-xl bg-gray-900 hover:bg-red-600 hover:text-white flex items-center justify-center transition-all border border-gray-800"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-xl bg-gray-900 hover:bg-red-600 hover:text-white flex items-center justify-center transition-all border border-gray-800"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-xl bg-gray-900 hover:bg-red-600 hover:text-white flex items-center justify-center transition-all border border-gray-800"><i class="fa-brands fa-x-twitter"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-gray-800 text-xs text-center flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p>&copy; 2026 DriveVision AutoGallery. Todos os direitos reservados.</p>
+                <p class="text-gray-500">Imagens via Unsplash API Showcase</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Database Vehicles Array
+        const vehicles = [
+            {
+                id: '1',
+                type: 'carros',
+                category: 'supercars',
+                categoryLabel: 'Supercar',
+                title: 'Ferrari F8 Tributo',
+                year: 2022,
+                image: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=1200&auto=format&fit=crop',
+                engine: '3.9L V8 Twin-Turbo',
+                power: '720 cv',
+                topSpeed: '340 km/h',
+                accel: '2.9s',
+                description: 'A Ferrari F8 Tributo é a máxima expressão do berlinetta clássico de dois lugares da marca italiana. Um homenageado ao motor V8 mais potente da história da Scuderia.'
+            },
+            {
+                id: '2',
+                type: 'motos',
+                category: 'naked-bikes',
+                categoryLabel: 'Naked Bike',
+                title: 'Ducati Streetfighter V4',
+                year: 2023,
+                image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1200&auto=format&fit=crop',
+                engine: '1103 cc Desmosedici Stradale',
+                power: '208 cv',
+                topSpeed: '290 km/h',
+                accel: '3.0s',
+                description: 'A Panigale V4 despida de suas carenagens, com guidão alto e largo, pesando apenas 178 kg e impulsionada pelo motor Desmosedici Stradale V4.'
+            },
+            {
+                id: '3',
+                type: 'carros',
+                category: 'esportivos',
+                categoryLabel: 'Esportivo',
+                title: 'Porsche 911 GT3 RS',
+                year: 2023,
+                image: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1200&auto=format&fit=crop',
+                engine: '4.0L Boxster 6 Cilindros',
+                power: '525 cv',
+                topSpeed: '296 km/h',
+                accel: '3.2s',
+                description: 'Desempenho aerodinâmico sem precedentes e pura engenharia das pistas adaptada para as ruas. A personificação perfeita da obsessão por velocidade da Porsche.'
+            },
+            {
+                id: '4',
+                type: 'motos',
+                category: 'motos-custom',
+                categoryLabel: 'Motos Custom',
+                title: 'Harley-Davidson Sportster S',
+                year: 2022,
+                image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1200&auto=format&fit=crop',
+                engine: 'Revolution Max 1250T',
+                power: '121 cv',
+                topSpeed: '220 km/h',
+                accel: '3.4s',
+                description: 'Um novo capítulo da lendária saga Sportster. Design musculoso, escapamento alto inspirado em Flat Track e torque brutal sob demanda.'
+            },
+            {
+                id: '5',
+                type: 'carros',
+                category: 'supercars',
+                categoryLabel: 'Supercar',
+                title: 'Lamborghini Huracán EVO',
+                year: 2021,
+                image: 'https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?q=80&w=1200&auto=format&fit=crop',
+                engine: '5.2L V10 Aspirado',
+                power: '640 cv',
+                topSpeed: '325 km/h',
+                accel: '2.9s',
+                description: 'Design agressivo com aerodinâmica preditiva extrema. O ronco inconfundível do motor V10 naturalmente aspirado é uma sinfonia puramente italiana.'
+            },
+            {
+                id: '6',
+                type: 'motos',
+                category: 'naked-bikes',
+                categoryLabel: 'Naked / Superbike',
+                title: 'BMW S1000RR Superbike',
+                year: 2023,
+                image: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?q=80&w=1200&auto=format&fit=crop',
+                engine: '999 cc 4-Cilindros em Linha',
+                power: '210 cv',
+                topSpeed: '303 km/h',
+                accel: '3.1s',
+                description: 'Referência tecnológica e de agilidade. As asas aerodinâmicas M e os controles eletrônicos refinados fazem da S1000RR uma arma no circuito.'
+            },
+            {
+                id: '7',
+                type: 'carros',
+                category: 'classicos',
+                categoryLabel: 'Clássico',
+                title: 'Ford Mustang Shelby GT500 Eleanore',
+                year: 1967,
+                image: 'https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?q=80&w=1200&auto=format&fit=crop',
+                engine: '7.0L V8 Cobra Jet',
+                power: '450 cv',
+                topSpeed: '240 km/h',
+                accel: '5.2s',
+                description: 'O verdadeiro ícone dos Muscle Cars americanos. Design muscular inconfundível e o som ensurdecedor de um V8 puramente mecânico.'
+            },
+            {
+                id: '8',
+                type: 'motos',
+                category: 'motos-custom',
+                categoryLabel: 'Motos Custom',
+                title: 'Vintage Cafe Racer Black Edition',
+                year: 2020,
+                image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1200&auto=format&fit=crop',
+                engine: '850 cc Twin Custom',
+                power: '85 cv',
+                topSpeed: '200 km/h',
+                accel: '4.1s',
+                description: 'Projeto customizado artesanal no estilo minimalista das clássicas corridas dos anos 60. Detalhes em couro nobre e acabamento preto fosco.'
+            },
+            {
+                id: '9',
+                type: 'carros',
+                category: 'esportivos',
+                categoryLabel: 'Esportivo',
+                title: 'Nissan GT-R Nismo (R35)',
+                year: 2022,
+                image: 'https://images.unsplash.com/photo-1621135802920-133df287f89c?q=80&w=1200&auto=format&fit=crop',
+                engine: '3.8L V6 Twin-Turbo VR38DETT',
+                power: '600 cv',
+                topSpeed: '315 km/h',
+                accel: '2.7s',
+                description: 'Apelidado de Godzilla, o GT-R Nismo é uma obra-prima de tração integral avançada e engenharia de precisão japonesa.'
+            }
+        ];
+
+        // State Management
+        let currentFilter = 'todos';
+        let searchQuery = '';
+        let favorites = JSON.parse(localStorage.getItem('drivevision_favs')) || [];
+        let showingOnlyFavs = false;
+        let activeModalVehicleId = null;
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGallery();
+            updateFavCount();
+            setupSearchAndSort();
+            setupMobileMenu();
+        });
+
+        // Mobile Menu Toggle
+        function setupMobileMenu() {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // Search & Filter Listeners
+        function setupSearchAndSort() {
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                renderGallery();
+            });
+        }
+
+        // Category Filter Logic
+        function filterCategory(cat) {
+            currentFilter = cat;
+            showingOnlyFavs = false;
+            
+            // Update active pill UI
+            const pills = document.querySelectorAll('.cat-pill');
+            pills.forEach(pill => {
+                pill.classList.remove('bg-red-600', 'text-white', 'shadow-lg');
+                pill.classList.add('bg-gray-800', 'text-gray-300');
+            });
+
+            // Find matching pill button if triggered programmatically
+            const targetPill = Array.from(pills).find(p => p.getAttribute('onclick')?.includes(`'${cat}'`));
+            if (targetPill) {
+                targetPill.classList.remove('bg-gray-800', 'text-gray-300');
+                targetPill.classList.add('bg-red-600', 'text-white', 'shadow-lg');
+            }
+
+            // Update Title Dynamic
+            const titleElement = document.getElementById('gallery-title');
+            if (cat === 'carros') titleElement.innerHTML = '<i class="fa-solid fa-car text-red-500"></i> Mostrando Carros';
+            else if (cat === 'motos') titleElement.innerHTML = '<i class="fa-solid fa-motorcycle text-amber-500"></i> Mostrando Motos';
+            else titleElement.innerHTML = `<i class="fa-solid fa-gauge-high text-cyan-400"></i> Filtro: ${cat.toUpperCase()}`;
+
+            renderGallery();
+        }
+
+        // Sorting Logic
+        function sortVehicles() {
+            renderGallery();
+        }
+
+        // Get Filtered Data
+        function getFilteredVehicles() {
+            let list = [...vehicles];
+
+            // If showing favorites mode
+            if (showingOnlyFavs) {
+                list = list.filter(v => favorites.includes(v.id));
+            } else if (currentFilter !== 'todos') {
+                if (currentFilter === 'carros') {
+                    list = list.filter(v => v.type === 'carros');
+                } else if (currentFilter === 'motos') {
+                    list = list.filter(v => v.type === 'motos');
+                } else {
+                    list = list.filter(v => v.category === currentFilter);
+                }
+            }
+
+            // Search filter
+            if (searchQuery) {
+                list = list.filter(v => 
+                    v.title.toLowerCase().includes(searchQuery) || 
+                    v.categoryLabel.toLowerCase().includes(searchQuery) ||
+                    v.engine.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            // Sort
+            const sortBy = document.getElementById('sort-select').value;
+            if (sortBy === 'power') {
+                list.sort((a, b) => parseInt(b.power) - parseInt(a.power));
+            } else if (sortBy === 'year-desc') {
+                list.sort((a, b) => b.year - a.year);
+            } else if (sortBy === 'speed') {
+                list.sort((a, b) => parseInt(b.topSpeed) - parseInt(a.topSpeed));
+            }
+
+            return list;
+        }
+
+        // Render Gallery Cards
+        function renderGallery() {
+            const grid = document.getElementById('gallery-grid');
+            const emptyState = document.getElementById('empty-state');
+            const countLabel = document.getElementById('result-count');
+
+            const filtered = getFilteredVehicles();
+
+            countLabel.textContent = `${filtered.length} veículo(s) encontrado(s)`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            grid.innerHTML = filtered.map(v => {
+                const isFav = favorites.includes(v.id);
+                return `
+                    <div class="card-zoom bg-darkCard border border-gray-800 rounded-2xl overflow-hidden shadow-xl hover:border-gray-700 transition-all flex flex-col group">
+                        <!-- Card Image Header -->
+                        <div class="relative overflow-hidden h-60 bg-gray-900 cursor-pointer" onclick="openModal('${v.id}')">
+                            <img src="${v.image}" alt="${v.title}" class="card-img w-full h-full object-cover transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-darkCard via-transparent to-transparent opacity-80"></div>
+                            
+                            <!-- Badges -->
+                            <div class="absolute top-4 left-4 flex gap-2">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-black/60 backdrop-blur-md text-amber-400 border border-white/10">
+                                    ${v.categoryLabel}
+                                </span>
+                            </div>
+
+                            <!-- Favorite Quick Button -->
+                            <button onclick="event.stopPropagation(); toggleFavorite('${v.id}')" 
+                                    class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:scale-110 transition-all">
+                                <i class="${isFav ? 'fa-solid text-red-500' : 'fa-regular'} fa-heart"></i>
+                            </button>
+
+                            <div class="absolute bottom-3 left-4 right-4 flex justify-between items-end">
+                                <span class="text-xs font-semibold text-gray-400"><i class="fa-regular fa-calendar-days"></i> ${v.year}</span>
+                                <span class="text-xs font-bold text-cyan-400 bg-cyan-950/60 px-2.5 py-1 rounded-lg border border-cyan-800/40">
+                                    <i class="fa-solid fa-gauge"></i> ${v.topSpeed}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-white group-hover:text-red-400 transition-colors cursor-pointer" onclick="openModal('${v.id}')">
+                                    ${v.title}
+                                </h3>
+                                <p class="text-xs text-gray-400 mt-1 line-clamp-2">${v.description}</p>
+                            </div>
+
+                            <!-- Quick Specs Bar -->
+                            <div class="grid grid-cols-2 gap-2 pt-3 border-t border-gray-800/80 text-xs">
+                                <div class="bg-gray-900/60 p-2 rounded-lg border border-gray-800">
+                                    <span class="text-gray-500 block text-[10px]">MOTOR</span>
+                                    <span class="font-semibold text-gray-300 truncate block">${v.engine}</span>
+                                </div>
+                                <div class="bg-gray-900/60 p-2 rounded-lg border border-gray-800">
+                                    <span class="text-gray-500 block text-[10px]">POTÊNCIA</span>
+                                    <span class="font-semibold text-amber-400 block">${v.power}</span>
+                                </div>
+                            </div>
+
+                            <!-- Action Button -->
+                            <button onclick="openModal('${v.id}')" class="w-full py-2.5 rounded-xl bg-gray-800 hover:bg-red-600 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2 group-hover:bg-red-600">
+                                <span>Ver Detalhes</span>
+                                <i class="fa-solid fa-expand text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle Favorites View Filter
+        function toggleFavoritesView() {
+            showingOnlyFavs = !showingOnlyFavs;
+            const titleElement = document.getElementById('gallery-title');
+            
+            if (showingOnlyFavs) {
+                titleElement.innerHTML = '<i class="fa-solid fa-heart text-red-500"></i> Seus Veículos Favoritos';
+            } else {
+                titleElement.innerHTML = '<i class="fa-solid fa-car-side text-red-500"></i> Mostrando Todos os Veículos';
+            }
+            renderGallery();
+        }
+
+        // Toggle Single Favorite Logic
+        function toggleFavorite(id) {
+            const index = favorites.indexOf(id);
+            const vehicle = vehicles.find(v => v.id === id);
+
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showToast(`Removido dos favoritos: ${vehicle.title}`);
+            } else {
+                favorites.push(id);
+                showToast(`Adicionado aos favoritos: ${vehicle.title}`, 'success');
+            }
+
+            localStorage.setItem('drivevision_favs', JSON.stringify(favorites));
+            updateFavCount();
+            renderGallery();
+
+            // Sync with modal button if open
+            if (activeModalVehicleId === id) {
+                updateModalFavBtn(id);
+            }
+        }
+
+        function updateFavCount() {
+            document.getElementById('fav-count').textContent = favorites.length;
+        }
+
+        // MODAL / LIGHTBOX FUNCTIONS
+        function openModal(id) {
+            const vehicle = vehicles.find(v => v.id === id);
+            if (!vehicle) return;
+
+            activeModalVehicleId = id;
+
+            document.getElementById('modal-img').src = vehicle.image;
+            document.getElementById('modal-title').textContent = vehicle.title;
+            document.getElementById('modal-category').textContent = vehicle.categoryLabel;
+            document.getElementById('modal-year').textContent = vehicle.year;
+            document.getElementById('modal-desc').textContent = vehicle.description;
+
+            document.getElementById('modal-spec-engine').textContent = vehicle.engine;
+            document.getElementById('modal-spec-power').textContent = vehicle.power;
+            document.getElementById('modal-spec-speed').textContent = vehicle.topSpeed;
+            document.getElementById('modal-spec-accel').textContent = vehicle.accel;
+
+            document.getElementById('modal-download-btn').href = vehicle.image;
+
+            updateModalFavBtn(id);
+
+            // Modal Display
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateModalFavBtn(id) {
+            const isFav = favorites.includes(id);
+            const favBtn = document.getElementById('modal-fav-toggle');
+            favBtn.onclick = () => toggleFavorite(id);
+
+            if (isFav) {
+                favBtn.innerHTML = `<i class="fa-solid fa-heart text-red-500"></i> <span>Remover Favorito</span>`;
+                favBtn.className = "flex-1 py-3 rounded-xl bg-red-950/60 border border-red-800 text-red-400 font-bold text-sm transition-all flex items-center justify-center gap-2";
+            } else {
+                favBtn.innerHTML = `<i class="fa-regular fa-heart"></i> <span>Adicionar aos Favoritos</span>`;
+                favBtn.className = "flex-1 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-bold text-sm transition-all flex items-center justify-center gap-2";
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('lightbox-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            activeModalVehicleId = null;
+        }
+
+        // Close Modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Copy Share Link
+        function copyShareLink() {
+            const tempInput = document.createElement('input');
+            tempInput.value = window.location.href;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast('Link do veículo copiado para a área de transferência!', 'info');
+        }
+
+        // Reset Filters
+        function resetFilters() {
+            searchQuery = '';
+            document.getElementById('search-input').value = '';
+            filterCategory('todos');
+        }
+
+        // Toast Notification System
+        function showToast(message, type = 'default') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgClass = 'bg-gray-900 border-gray-700 text-gray-200';
+            if (type === 'success') bgClass = 'bg-red-950 border-red-700 text-white';
+            if (type === 'info') bgClass = 'bg-cyan-950 border-cyan-700 text-cyan-200';
+
+            toast.className = `px-4 py-3 rounded-xl border ${bgClass} shadow-2xl text-xs sm:text-sm font-semibold flex items-center gap-3 transition-all transform translate-y-2 opacity-0`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${message}</span>`;
+
+            container.appendChild(toast);
+
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            // Animate out
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
